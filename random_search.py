@@ -14,7 +14,7 @@ class RandomSearch:
 
         self.possible_options = {
             'hidden layers': [1, 2, 3, 4, 5],
-            'neurons per layer': [i for i in range(32, 513)],
+            'neurons per layer': [32, 64, 128, 256, 512],
             'activation': ['relu', 'tanh', 'sigmoid'],
             'learning rate': [1e-1, 1e-2, 1e-3, 1e-4, 1e-5],
             'batch size': [16, 32, 64, 128],
@@ -59,8 +59,8 @@ class RandomSearch:
 
         return accuracy, train_history
 
-    def optimize_hyperparameters(self, n_iterations=10):
-        for i in range(n_iterations):
+    def optimize_hyperparameters(self):
+        for i in range(self.n_iterations):
             config = self.sample_hyperparameters()
             score, train_history = self.evaluate_hyperparameters(config)
 
@@ -77,4 +77,4 @@ class RandomSearch:
 
     def get_top_n(self, n=5):
         sorted_history = sorted(self.history, key=lambda x: x['score'], reverse=True)
-        return sorted_history[:n]
+        return [(h['config'], h['score']) for h in sorted_history[:n]]
